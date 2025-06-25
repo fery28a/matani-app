@@ -1,0 +1,143 @@
+/* client/src/styles/App.css */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7f6;
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  /* Hapus atau jangan atur lebar tetap di sini */
+}
+
+.content {
+  flex-grow: 1; /* Konten akan mengisi sisa ruang yang tersedia */
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  /* --- UBAH DI SINI --- */
+  margin: 20px; /* Pertahankan margin luar jika ingin efek floating box */
+  margin-left: 0; /* <--- KUNCI PERUBAHAN: Hapus margin kiri yang menyebabkan jeda */
+  /* --- AKHIR UBAH --- */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-sizing: border-box; /* Penting agar padding tidak menambah lebar */
+
+  /* Anda bisa mempertahankan ini jika ingin batasan lebar, tapi hapus jika ingin mengisi penuh */
+  /* max-width: calc(100% - 290px); /* Contoh: 100% lebar layar dikurangi lebar sidebar dan margin total */
+  /* min-width: 800px; /* Minimal lebar agar tidak terlalu sempit di layar kecil (misal 13 inch) */
+
+  /* Jika Anda ingin konten mengisi PENUH sisa lebar setelah sidebar */
+  /* Hapus max-width dan min-width di .content */
+  /* biarkan flex-grow: 1; saja */
+}
+
+/* --- Opsional: Jika Anda ingin kontennya TIDAK MEMILIKI MARGIN di SISI KANAN juga --- */
+/* Maka ubah .content menjadi: */
+/*
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  margin: 0; // <--- Hapus semua margin luar
+  padding-left: 20px; // <--- Tambahkan padding ke dalam jika perlu
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+*/
+/* --- Akhir Opsional --- */
+
+
+/* Styling dasar untuk form dan tabel yang belum menggunakan MUI penuh */
+form {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fcfcfc;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Default styling for select, textarea if not fully replaced by MUI */
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+/* Table styling (if not fully replaced by MUI for some pages) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  color: #333;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Button styling for non-MUI buttons if any still exist */
+button {
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-right: 8px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+}
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+/* Specific button styles */
+button.edit-btn { background-color: #17a2b8; }
+button.delete-btn { background-color: #dc3545; }
+button.reset-btn { background-color: #ffc107; color: black; }
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+ul li {
+  margin-bottom: 3px;
+}

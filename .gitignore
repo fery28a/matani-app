@@ -1,0 +1,27 @@
+# Gitignore untuk aplikasi MERN Stack
+
+# Node modules
+node_modules/
+
+# Frontend build folder
+client/build/
+client/.env.local # Jika Anda punya file .env lokal spesifik React
+client/.env.development.local
+client/.env.production.local
+
+# Backend environment variables
+server/.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS generated files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
