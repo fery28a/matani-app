@@ -10,13 +10,14 @@ const mongoose = require('mongoose');
 // @desc    Get latest spray history
 // @route   GET /api/dashboard/latest-spray
 // @access  Protected
-const getLatestSprayHistory = async (req, res) => {
+const getLatestSprayHistory = async (req, res) => { // <--- PASTIKAN FUNGSI INI TERDEFINISI
   try {
     const latestSprays = await Penyemprotan.find({})
       .sort({ tanggal: -1 })
       .limit(5)
       .populate('lahan', 'nama')
-      .select('tanggal deskripsi totalBiaya');
+      .populate('pestisidaDigunakan.pestisida', 'namaDagang satuan')
+      .select('tanggal deskripsi totalBiaya pestisidaDigunakan');
 
     console.log("Dashboard API: Fetched latest sprays count:", latestSprays.length);
     res.status(200).json(latestSprays);
@@ -29,7 +30,7 @@ const getLatestSprayHistory = async (req, res) => {
 // @desc    Get total costs aggregated by lahan
 // @route   GET /api/dashboard/total-costs-per-lahan
 // @access  Protected
-const getTotalCostsPerLahan = async (req, res) => {
+const getTotalCostsPerLahan = async (req, res) => { // <--- PASTIKAN FUNGSI INI TERDEFINISI
   try {
     const activityModels = [
       { model: PengolahanLahan, name: 'PengolahanLahan' },
@@ -93,7 +94,7 @@ const getTotalCostsPerLahan = async (req, res) => {
   }
 };
 
-module.exports = {
+module.exports = { // <--- PASTIKAN EXPORTNYA BENAR
   getLatestSprayHistory,
   getTotalCostsPerLahan,
 };

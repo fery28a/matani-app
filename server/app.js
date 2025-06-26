@@ -1,17 +1,32 @@
 // server/app.js
+const path = require('path'); // PENTING: Import module 'path'
+// PENTING: Muat .env menggunakan absolute path
+// Path ini mengasumsikan .env berada di root proyek (misal: /var/www/matani_final_app/.env)
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') }); 
+
+// Debugging log untuk mengetahui direktori kerja Node.js dan status env vars
+// Ini sangat membantu saat debugging di VPS
+console.log('Node.js CWD:', process.cwd());
+console.log('Node.js __dirname:', __dirname);
+console.log('Absolute path to .env:', path.resolve(__dirname, '../.env'));
+console.log('MONGO_URI from process.env:', process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 30) + '...' : "MONGO_URI is undefined");
+console.log('JWT_SECRET from process.env:', process.env.JWT_SECRET ? process.env.JWT_SECRET.substring(0, 30) + '...' : "JWT_SECRET is undefined");
+
+
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const connectDB = require('./config/db'); // connectDB membaca process.env.MONGO_URI
 
-// Import Models (agar Mongoose mengenalnya)
+
+// Import Models (agar Mongoose mengenalnya) - SEMUA MODEL HARUS DI-REQUIRE
 require('./models/Lahan');
 require('./models/Pupuk');
 require('./models/Pestisida');
 require('./models/Kebutuhan');
 require('./models/Benih');
-require('./models/User'); // <--- TAMBAH BARIS INI (Import Model User)
+require('./models/User');
 
-// Import Kegiatan Models
+// Import Kegiatan Models - SEMUA MODEL HARUS DI-REQUIRE
 require('./models/PengolahanLahan');
 require('./models/Penanaman');
 require('./models/PerawatanTanaman');
@@ -19,58 +34,55 @@ require('./models/Penyemprotan');
 require('./models/Panen');
 
 // Import Rute API
+// Perhatikan path relatifnya dari app.js
 const lahanRoutes = require('./routes/lahanRoutes');
 const benihRoutes = require('./routes/benihRoutes');
 const pupukRoutes = require('./routes/pupukRoutes');
 const pestisidaRoutes = require('./routes/pestisidaRoutes');
 const kebutuhanRoutes = require('./routes/kebutuhanRoutes');
-const userRoutes = require('./routes/userRoutes'); // <--- TAMBAH BARIS INI (Import Rute User)
+const userRoutes = require('./routes/userRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes'); // <--- PENTING: IMPOR INI HARUS ADA!
 
 // Import Rute Kegiatan
 const pengolahanLahanRoutes = require('./routes/pengolahanLahanRoutes');
 const penanamanRoutes = require('./routes/penanamanRoutes');
-const perawatanTanamanRoutes = require('./routes/perawatanTanamanRoutes');
+const perawatanTanamanRoutes = require('./routes/perawatanTanamanRoutes'); // Typo sebelumnya: PerawatanTanasanRoutes
 const penyemprotanRoutes = require('./routes/penyemprotanRoutes');
 const panenRoutes = require('./routes/panenRoutes');
 
-// Import Middleware (optional, for protecting routes)
-const { protect } = require('./middleware/authMiddleware'); // <--- TAMBAH BARIS INI
+// Import Middleware
+const { protect } = require('./middleware/authMiddleware');
+
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Connect to Database
-connectDB();
+connectDB(); // connectDB akan mencoba koneksi menggunakan MONGO_URI dari process.env
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Middleware Express
+app.use(cors()); // Mengizinkan permintaan lintas origin dari frontend
+app.use(express.json()); // Mengizinkan Express untuk memparsing body permintaan sebagai JSON
 
-// Rute API
-app.get('/', (req, res) => {
-  res.send('API Matani Berjalan!');
-});
 
 // Rute Publik (Login)
-app.use('/api/users', userRoutes); // <--- Rute User (login)
+app.use('/api/users', userRoutes);
 
-// Rute yang Dilindungi (Contoh: Semua Master Data dan Kegiatan akan dilindungi)
-// Ini akan membutuhkan token JWT di header Authorization: Bearer <token>
-app.use('/api/lahan', protect, lahanRoutes); // <--- Tambahkan 'protect'
-app.use('/api/benih', protect, benihRoutes); // <--- Tambahkan 'protect'
-app.use('/api/pupuk', protect, pupukRoutes); // <--- Tambahkan 'protect'
-app.use('/api/pestisida', protect, pestisidaRoutes); // <--- Tambahkan 'protect'
-app.use('/api/kebutuhan', protect, kebutuhanRoutes); // <--- Tambahkan 'protect'
+// Rute yang Dilindungi dengan middleware 'protect'
+app.use('/api/lahan', protect, lahanRoutes);
+app.use('/api/benih', protect, benihRoutes);
+app.use('/api/pupuk', protect, pupukRoutes);
+app.use('/api/pestisida', protect, pestisidaRoutes);
+app.use('/api/kebutuhan', protect, kebutuhanRoutes);
 
-app.use('/api/kegiatan/pengolahan-lahan', protect, pengolahanLahanRoutes); // <--- Tambahkan 'protect'
-app.use('/api/kegiatan/penanaman', protect, penanamanRoutes);             // <--- Tambahkan 'protect'
-app.use('/api/kegiatan/perawatan-tanaman', protect, perawatanTanamanRoutes); // <--- Tambahkan 'protect'
-app.use('/api/kegiatan/penyemprotan', protect, penyemprotanRoutes);       // <--- Tambahkan 'protect'
-app.use('/api/kegiatan/panen', protect, panenRoutes);                     // <--- Tambahkan 'protect'
+app.use('/api/kegiatan/pengolahan-lahan', protect, pengolahanLahanRoutes);
+app.use('/api/kegiatan/penanaman', protect, penanamanRoutes);
+app.use('/api/kegiatan/perawatan-tanaman', protect, perawatanTanamanRoutes);
+app.use('/api/kegiatan/penyemprotan', protect, penyemprotanRoutes);
+app.use('/api/kegiatan/panen', protect, panenRoutes);
 
-// Catatan: Jika ada rute laporan yang perlu diakses tanpa login (misal untuk publik),
-// jangan tambahkan 'protect' di rute tersebut.
-// Saat ini, semua rute laporan (GET) masih diakses melalui rute kegiatan, jadi akan dilindungi.
+app.use('/api/dashboard', protect, dashboardRoutes); // Ini rute dashboard
+
 
 // Jalankan Server
 app.listen(PORT, () => {

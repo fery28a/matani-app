@@ -1,27 +1,40 @@
-# Gitignore untuk aplikasi MERN Stack
+# .gitignore
 
 # Node modules
 node_modules/
-
-# Frontend build folder
-client/build/
-client/.env.local # Jika Anda punya file .env lokal spesifik React
-client/.env.development.local
-client/.env.production.local
-
-# Backend environment variables
-server/.env
-
-# Logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# OS generated files
-.DS_Store
-.idea/
-.vscode/
-*.swp
-*.swo
+# Environment variables
+# Ini sangat penting untuk mencegah kredensial sensitif diupload ke GitHub
+.env
+client/.env
+client/.env.local
+client/.env.development.local
+client/.env.production.local
+server/.env
+
+# Build folders
+# Frontend build output
+client/build/
+
+# IDE and OS generated files
+.DS_Store          # macOS specific
+.idea/             # IntelliJ IDEA specific
+.vscode/           # Visual Studio Code specific (often contains user settings)
+*.swp              # Vim swap files
+*.swo              # Vim swap files
+/.history          # VS Code local history
+
+# Logs and other temporary files
+*.log
+*.tmp
+*.bak
+
+
+
+
+
+
