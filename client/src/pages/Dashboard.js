@@ -1,7 +1,6 @@
 // client/src/pages/Dashboard.js
-import React, { useState, useEffect } from 'react'; // <--- KOREKSI: '=>' diubah menjadi 'from'
+import React, { useState, useEffect } from 'react';
 import { getLatestSprayHistory, getTotalCostsPerLahan } from '../services/dashboardService';
-import { getUserInfo } from '../services/authService'; // Untuk menampilkan nama user
 
 // Import komponen Material-UI
 import {
@@ -23,15 +22,15 @@ import {
 } from '@mui/material';
 
 // Import ikon Material-UI
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled'; // Untuk riwayat
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';       // Untuk biaya
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 function Dashboard() {
   const [latestSpray, setLatestSpray] = useState([]);
   const [totalCostsPerLahan, setTotalCostsPerLahan] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userInfo = getUserInfo(); // Ambil info user
+  // const userInfo = getUserInfo(); // Hapus jika login feature dihapus
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -43,8 +42,8 @@ function Dashboard() {
           getTotalCostsPerLahan(),
         ]);
         
-        console.log("Dashboard Frontend: Fetched Spray Data:", sprayData); // Debugging log
-        console.log("Dashboard Frontend: Fetched Costs Data:", costsData); // Debugging log
+        console.log("Dashboard Frontend: Fetched Spray Data:", sprayData); 
+        console.log("Dashboard Frontend: Fetched Costs Data:", costsData);
 
         setLatestSpray(sprayData);
         setTotalCostsPerLahan(costsData);
@@ -61,7 +60,7 @@ function Dashboard() {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Dashboard Selamat datang, {userInfo?.username || 'Pengguna'}!
+        Dashboard Selamat datang! 
       </Typography>
       <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 3 }}>
         Ringkasan kegiatan pertanian Anda.
@@ -96,7 +95,6 @@ function Dashboard() {
                         secondary={
                           <React.Fragment>
                             <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.secondary">
-                              {/* Tampilkan detail pestisida */}
                               {spray.pestisidaDigunakan && spray.pestisidaDigunakan.length > 0 ? (
                                 spray.pestisidaDigunakan.map((item, i) => (
                                   <span key={i}>

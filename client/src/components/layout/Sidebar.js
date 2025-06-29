@@ -13,7 +13,6 @@ import {
   Typography,
   Box,
   Divider,
-  Button // <--- Import Button
 } from '@mui/material';
 
 // Import ikon Material-UI
@@ -24,8 +23,6 @@ import ArticleIcon from '@mui/icons-material/Article';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
-import LogoutIcon from '@mui/icons-material/Logout'; // <--- Import LogoutIcon
-
 
 // Ikon untuk sub-menu Master Data
 import LandscapeIcon from '@mui/icons-material/Landscape';
@@ -41,10 +38,9 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import ForestIcon from '@mui/icons-material/Forest';
 
 
-// Lebar sidebar
 const drawerWidth = 250;
 
-function Sidebar({ onLogout }) { // <--- Terima prop onLogout
+function Sidebar() { 
   const location = useLocation();
   const [openMasterData, setOpenMasterData] = useState(true);
   const [openKegiatan, setOpenKegiatan] = useState(true);
@@ -245,17 +241,6 @@ function Sidebar({ onLogout }) { // <--- Terima prop onLogout
           </List>
         </Collapse>
       </List>
-      <Box sx={{ mt: 'auto', p: 2 }}> {/* Ini akan mendorong tombol logout ke bawah */}
-        <Button
-          variant="contained"
-          color="error" // Warna merah untuk logout
-          fullWidth
-          startIcon={<LogoutIcon />}
-          onClick={onLogout}
-        >
-          Logout
-        </Button>
-      </Box>
     </Drawer>
   );
 }
